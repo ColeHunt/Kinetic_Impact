@@ -6,10 +6,6 @@ OpenCV opencv;
 
 int minDepth = 0;
 int maxDepth = 900;
-//int topBorder = 50;
-//int bottomBoarder = 374;
-//int leftBorder =50;
-//int rightBorder = 462;
 
 ArrayList<Contour> contours;
 Contour maxAreaContour = null;
@@ -74,25 +70,23 @@ void draw() {
       //Depth value for this pixel
       int rawDepth = depth[index];
       
-      //all Pixels in depth range and bewteen the boader
-      //if(x > leftBorder && x < rightBorder && y > topBorder && y < bottomBoarder
-      //&& rawDepth > minDepth && rawDepth < maxDepth) {
-      
-      //all pixels in depth range
-      if(rawDepth > minDepth && rawDepth < maxDepth) {
-        img.pixels[index] = color(255,255,255);
-      }
-      else {
-        img.pixels[index] = color(0); // corlor(0) = black
-      }
+      //All pixels in the maximum contour
       if(rawDepth > minDepth && rawDepth < maxDepth && contours.size() > 0 
           && maxAreaContour.containsPoint(x, y) ) {
           pixelTotalX += x;
           pixelTotalY += y;
           pixelTotal += 1;
+          img.pixels[index] = color(255,255,255);
           
           //Set all pixel in image at index to color
           
+      }
+      //all pixels in depth range
+      else if(rawDepth > minDepth && rawDepth < maxDepth) {
+        img.pixels[index] = color(255,255,255);
+      }
+      else {
+        img.pixels[index] = color(0); // corlor(0) = black
       }
     }
   }
@@ -115,9 +109,13 @@ void draw() {
   //points, and the border around shapes. 
   //All widths are set in units of pixels.
   strokeWeight(3);
+  
+  //Run once countours are found
   if(contours.size() > 0) {
     float maxArea = 0.0;
     //maxAreaContour = contours.get(0);
+    
+    //Find the countour with the max area
     for (Contour contour : contours) {
       if (contour.area() > maxArea) {
          maxAreaContour = contour;
@@ -126,8 +124,8 @@ void draw() {
       
     }
     
-    
     //maxAreaContour.draw();
+    
     Contour maxAreaPolyApprox = maxAreaContour.getPolygonApproximation();
     maxAreaPolyApprox.draw();
     
@@ -174,12 +172,12 @@ void draw() {
     
     
     
-    stroke(255,0,0);
-    beginShape();
-         for (PVector point : maxAreaContour.getPolygonApproximation().getPoints()) {
-           vertex(point.x, point.y);
-         }
-    endShape();
+    //stroke(255,0,0);
+    //beginShape();
+    //     for (PVector point : maxAreaContour.getPolygonApproximation().getPoints()) {
+    //       vertex(point.x, point.y);
+    //     }
+    //endShape();
     
     stroke(0,0,255);
     ellipse(DirectionPoint.x, DirectionPoint.y, 10, 10);
