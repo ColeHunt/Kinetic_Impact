@@ -5,13 +5,15 @@ Kinect2 kinect;
 OpenCV opencv;
 
 int minDepth = 0;
-int maxDepth = 800;
+int maxDepth = 900;
 //int topBorder = 50;
 //int bottomBoarder = 374;
 //int leftBorder =50;
 //int rightBorder = 462;
 
 ArrayList<Contour> contours;
+Contour maxAreaContour = null;
+
 
 void setup() {
   //Size of window for video output. Depth resolution value: 512, 424
@@ -54,7 +56,7 @@ void draw() {
   int pixelTotalY = 0;
   
   //Addition of all x values in depth range
-  int pixelTotal = 0;
+  int pixelTotal = 1;
 
   //For calibration
   //println(minDepth + " " + maxDepth);
@@ -78,15 +80,19 @@ void draw() {
       
       //all pixels in depth range
       if(rawDepth > minDepth && rawDepth < maxDepth) {
+        img.pixels[index] = color(255,255,255);
+      }
+      else {
+        img.pixels[index] = color(0); // corlor(0) = black
+      }
+      if(rawDepth > minDepth && rawDepth < maxDepth && contours.size() > 0 
+          && maxAreaContour.containsPoint(x, y) ) {
           pixelTotalX += x;
           pixelTotalY += y;
           pixelTotal += 1;
           
           //Set all pixel in image at index to color
-          img.pixels[index] = color(255,255,255);
-      }
-      else {
-        img.pixels[index] = color(0); // corlor(0) = black
+          
       }
     }
   }
@@ -111,24 +117,73 @@ void draw() {
   strokeWeight(3);
   if(contours.size() > 0) {
     float maxArea = 0.0;
-    Contour maxAreaContour = null;
     //maxAreaContour = contours.get(0);
     for (Contour contour : contours) {
       if (contour.area() > maxArea) {
          maxAreaContour = contour;
-         maxAreaContour.draw();
          maxArea = contour.area();
       }
       
     }
     
-    maxAreaContour.draw();
+    
+    //maxAreaContour.draw();
+    Contour maxAreaPolyApprox = maxAreaContour.getPolygonApproximation();
+    maxAreaPolyApprox.draw();
+    
+    float maxDistance = 0;
+    PVector DirectionPoint = maxAreaPolyApprox.getPoints().get(0);
+    PVector center = new PVector(pixelTotalX / pixelTotal, pixelTotalY / pixelTotal);
+    for (PVector point : maxAreaPolyApprox.getPoints()) {
+      if(point.dist(center) > maxDistance) {
+        maxDistance = point.dist(center);
+        DirectionPoint = point;
+      }
+      
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  //  for(int x= 0; x < img.width; x++) {
+  //  for (int y = 0; y < img.height; y++) {
+  //    int index = x + y * img.width;
+      
+
+      
+  //    if(maxAreaContour.containsPoint(x, y)) {
+  //        pixelTotalX += x;
+  //        pixelTotalY += y;
+  //        pixelTotal += 1;
+          
+  
+  //    }
+  //  }
+  //}
+    
+    
+    
+    
+    
+    
+    
+    
     stroke(255,0,0);
     beginShape();
          for (PVector point : maxAreaContour.getPolygonApproximation().getPoints()) {
            vertex(point.x, point.y);
          }
     endShape();
+    
+    stroke(0,0,255);
+    ellipse(DirectionPoint.x, DirectionPoint.y, 10, 10);
+    ellipse(center.x, center.y, 10, 10);
   }
   //for (Contour contour : contours) {
     
@@ -158,8 +213,6 @@ void draw() {
   //  //  contour.getBoundingBox().width, contour.getBoundingBox().height);
   //}
   //Draw a circle at the average of all pixels in range if there is at lease a 1000 pixels
-  //if (pixelTotal > 1000) {
-  //  ellipse(pixelTotalX / pixelTotal, pixelTotalY / pixelTotal, 40, 40);
+  
     
-  //}
 }
