@@ -1,6 +1,13 @@
+function preload(){
+  json = loadJSON("data.json"); 
+}
+
 function Ship(){
   
-  this.pos = createVector(width/2, height/2);
+  var xPos = json.centerX;
+  var yPos = json.centerY;
+  
+  this.pos = createVector(xPos, yPos);
   this.r = 10;
   this.heading = 0;
   this.vel = createVector(1,0);
@@ -47,7 +54,7 @@ function Ship(){
 
     if(keyIsDown(UP_ARROW)){ 
       
-      this.boost()
+      this.boost();
             
     }
         
