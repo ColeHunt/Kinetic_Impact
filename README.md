@@ -9,7 +9,7 @@ A script using p5.js runs the game and creates the graphical interface that the 
 - XBOX Kinect
 
 ## Authors
-#### (Group 3)
+#### (Group 6)
 - **Cole Hunt**
 - **Austin Thoreson**
 - **Liam Anderson**
