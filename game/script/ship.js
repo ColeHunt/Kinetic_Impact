@@ -1,13 +1,7 @@
-function preload(){
-  json = loadJSON("data.json"); 
-}
 
 function Ship(){
   
-  var xPos = json.centerX;
-  var yPos = json.centerY;
-  
-  this.pos = createVector(xPos, yPos);
+  this.pos = createVector(width/2, height/2);
   this.r = 10;
   this.heading = 0;
   this.vel = createVector(1,0);
@@ -21,7 +15,16 @@ function Ship(){
     this.vel.mult(0.95); //scales decay
   }
   
-  this.edges = function()  {
+  this.hits = function(asteroid){
+    var d = dist(this.pos.x, this.pos.y, asteroid.pos.x, asteroid.pos.y);
+    if(d < asteroid.r){
+      return true;
+    } else{
+      return false;
+    }
+  }
+  
+  this.edges = function()  { //allows for wrapping around
     if(this.pos.x > width + this.r){
       this.pos.x = -this.r;
     }else if(this.pos.x < -this.r){
@@ -36,13 +39,13 @@ function Ship(){
   }
   
   this.render = function() {
-    
+    push();
     translate(this.pos.x, this.pos.y);    
     rotate(this.heading + PI/2);
-    noFill();
+    fill(0);
     stroke(255);
     triangle(-this.r, this.r, this.r, this.r, 0, -this.r); 
-
+    pop();
   }
   
   this.boost = function()  {
@@ -54,7 +57,7 @@ function Ship(){
 
     if(keyIsDown(UP_ARROW)){ 
       
-      this.boost();
+      this.boost()
             
     }
         
@@ -67,7 +70,9 @@ function Ship(){
     }else if(keyIsDown(RIGHT_ARROW)){
       this.heading += turnSpeed;
     }
-
+    
+    
+    
   }
   
 }
