@@ -3,6 +3,13 @@ public class Ship {
   int r;
   int heading;
   PVector vel;
+  float turnSpeed = 0.1;
+
+  
+  boolean UP_ARROW = false;
+  boolean LEFT_ARROW = false;
+  boolean RIGHT_ARROW = false;
+  
   public Ship(){
     
     pos = new PVector(width/2, height/2);
@@ -13,10 +20,7 @@ public class Ship {
     public void update() {
       this.edges(); //check board edges and adjusts
       this.render(); //render piece
-      this.turn(); //check to see if should turn
-      this.move(); //checks to see if should move
-      this.pos.add(this.vel); //moves with velocity and "decay"
-      this.vel.mult(0.95); //scales decay
+      this.updatePos();
     }
     
     public boolean hits(Asteroid a){
@@ -53,23 +57,11 @@ public class Ship {
       pop();
     }
     
-    public void boost()  {
-      PVector force = PVector.fromAngle(heading); //TODO:
-      vel.add(force.mult(0.3));
+    public void updatePos(){
+      this.pos.x = mouseX;
+      this.pos.y = mouseY;
+      
+      //this.heading == angle of triangle
     }
-    
-    public void move()  {
-  
-      if(UP_ARROW){ 
-        boost();    
-      }  
-    }
-  
-    public void turn(){
-      if(LEFT_ARROW){
-        heading -= turnSpeed;
-      }else if(RIGHT_ARROW){
-        heading += turnSpeed;
-      }
-    }
+   
   }
