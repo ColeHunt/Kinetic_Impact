@@ -5,14 +5,15 @@ ArrayList<Laser> lasers = new ArrayList<Laser>();
 int width = 600;
 int height = 600;
 int timer;
-boolean UP_ARROW = false;
-boolean LEFT_ARROW = false;
-boolean RIGHT_ARROW = false;
+ 
 
 boolean autoFire = false;
 
+public void settings(){
+   size(600, 600);  
+}
+
 void setup() {
-  size(600, 600);
   timer = 0;
   
   
@@ -71,6 +72,7 @@ void draw() {
       }
     }
   } 
+  
   ship.update();
 }
 
@@ -85,6 +87,7 @@ public void keyPressed() {
   if(key == ' '){
     lasers.add(new Laser(ship.pos, ship.heading)); //creates a new laser at ships current position
   }else if(key == 'r'){
+    asteroids = new ArrayList<Asteroid>();
     setup();
   }else if(key == 'a'){
     if(autoFire){
@@ -93,4 +96,5 @@ public void keyPressed() {
       autoFire = true;
     }
   }
+  
 }
