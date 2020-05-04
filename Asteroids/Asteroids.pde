@@ -49,10 +49,16 @@ void setup() {
 
 void draw() {
   background(0);
+  // Uses the kinects depth array to update vision.img 
   vision.findDepth();
+  // Used to find contours in vision.img
   opencv = new OpenCV(this, vision.img);
+  // Finds an ArrayList of all contours in vision.img and finds the maxAreaContour
+  // and maxAreaPolyApprox contour
   vision.findContours(opencv);
+  // Finds center, DirectionPoint, and gameCenter point
   vision.findPoints();
+  // Finds the angle between the center point and direction point
   angle = vision.findAngle(); //<>//
     
     //********* GAME *********
