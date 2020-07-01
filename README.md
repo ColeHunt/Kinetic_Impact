@@ -11,5 +11,5 @@ A script using p5.js runs the game and creates the graphical interface that the 
 ## Authors
 #### (Group 6)
 - **Cole Hunt**
-- **Austin Thoreson**
-- **Liam Anderson**
+- [**Austin Thoreson**](https://github.com/athoreso)
+- [**Liam Anderson**](https://github.com/liama28)
